@@ -13,6 +13,7 @@
     <div v-else>
       <strong>User</strong>
     </div>
+    <create-tweet @newTweet="createTweet" />
     <hr>
     <div><strong>Tweets :</strong></div>
 
@@ -23,10 +24,11 @@
 
 <script>
 import TweetItem from "./TweetItem.vue"
+import CreateTweet from "./CreateTweet.vue"
 
 export default {
   name: 'App',
-  components: { TweetItem },
+  components: { TweetItem, CreateTweet },
   data() {
     return {
       followers: 0,
@@ -64,6 +66,12 @@ export default {
     },
     toggleSelected(id) {
       console.log(`selected Tweet is #${id}`)
+    },
+    createTweet(newTweet) {
+      this.user.tweets.unshift({
+        id: this.user.tweets.length + 1,
+        message: newTweet
+      })
     }
   },
   mounted() {
