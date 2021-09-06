@@ -83,8 +83,9 @@ export default {
 }
 </script>
 
-<style scoped>
-h1 {
-  margin: 0
+<!-- scoped is only apply css for this component -->
+<style lang="scss" scoped>
+.button {
+  display: inline-block;
 }
 </style>
