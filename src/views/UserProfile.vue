@@ -1,13 +1,13 @@
 <template>
   <div id="profile">
-    @{{ user.username }} -- {{ fullName }}
+    @{{ state.user.username }} -- {{ fullName }}
     <br>
-    <strong>Followers: {{ followers }}</strong>
+    <strong>Followers: {{ state.followers }}</strong>
     <br>
     <button @click="followUser">Follow</button>
     <br>
     <!-- Enable only if isAdmin is true -->
-    <div v-if="user.isAdmin">
+    <div v-if="state.user.isAdmin">
       <strong>Admin</strong>
     </div>
     <div v-else>
@@ -18,19 +18,20 @@
     <div><strong>Tweets :</strong></div>
 
     <!-- @selectedTweet have to match the event name from the $emit -->
-    <tweet-item v-for="tweet in user.tweets" :key="tweet.id" :username="user.username" :tweet="tweet" @selectedTweet="toggleSelected" />
+    <tweet-item v-for="tweet in state.user.tweets" :key="tweet.id" :username="state.user.username" :tweet="tweet" @selectedTweet="toggleSelected" />
   </div>
 </template>
 
 <script>
+import { reactive, watch, computed, onMounted } from 'vue'
 import TweetItem from "@/components/TweetItem.vue"
 import CreateTweet from "@/components/CreateTweet.vue"
 
 export default {
-  name: 'App',
+  name: 'UserProfile',
   components: { TweetItem, CreateTweet },
-  data() {
-    return {
+  setup() {
+    const state = reactive({
       followers: 0,
       user: {
         id: 1,
@@ -44,41 +45,45 @@ export default {
           {id: 2, message: "How is the second message going on"}
         ]
       }
-    }
-  },
-  watch: {
+    })
+
     // watch datachange on the data and react based on it.
-    followers(newValue, oldValue) {
+    watch(() => state.followers, (newValue, oldValue) => {
       if (newValue > oldValue) {
-        console.log(`${this.user.username} gained a follower. Enjoy !!!`)
+        console.log(`${state.user.username} gained a follower. Enjoy !!!`)
       }
+    })
+
+    const fullName = computed(() => {return `${state.user.firstName} ${state.user.lastName}`})
+
+    function followUser() {
+      console.log(state.followers)
+      state.followers++
     }
-  },
-  computed: {
-    fullName() {
-      return `${this.user.firstName} ${this.user.lastName}`;
-    }
-  },
-  methods: {
-    // general methods
-    followUser() {
-      this.followers++
-    },
-    toggleSelected(id) {
+
+    function toggleSelected(id) {
       console.log(`selected Tweet is #${id}`)
-    },
-    createTweet(newTweet) {
-      this.user.tweets.unshift({
-        id: this.user.tweets.length + 1,
+    }
+
+    function createTweet(newTweet) {
+      state.user.tweets.unshift({
+        id: state.user.tweets.length + 1,
         message: newTweet
       })
     }
-  },
-  mounted() {
-    // when a component is loaded.
-    // Its a life cycle method
-    console.log('component is loaded . . .');
-    this.followUser();
+
+    onMounted(() => {
+      console.log('User Profile component loaded . . . ')
+      followUser()
+    })
+
+    return {
+      state,
+      fullName,
+      followUser,
+      toggleSelected,
+      createTweet
+    }
   }
 }
 </script>

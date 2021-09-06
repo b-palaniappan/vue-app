@@ -1,5 +1,5 @@
 <template>
-  <form action="#" id="createTweet" @submit.prevent="submitTweet" :class="{ 'exceed': tweetCharacterCount > 180 }">
+  <form action="#" id="createTweet" @submit.prevent="submitTweet()" :class="{ 'exceed': tweetCharacterCount > 180 }">
     <label for="newTweet"><strong>New Tweet</strong> ({{ tweetCharacterCount }} / 180)</label>
     <br>
     <textarea name="newTweet" id="newTweet" cols="30" rows="4" v-model="state.newTweetContent"></textarea>
@@ -20,10 +20,11 @@
 </template>
 
 <script>
-import { reactive, computed } from 'vue';
+import { reactive, computed } from 'vue'
 
 export default {
-  name: "CreateTweet",
+  name: 'CreateTweet',
+  emits: ['newTweet'],
   setup(props, ctx) {
     const state = reactive({
       tweetTypes: [
