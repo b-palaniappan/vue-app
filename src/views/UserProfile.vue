@@ -23,8 +23,8 @@
 </template>
 
 <script>
-import TweetItem from "./TweetItem.vue"
-import CreateTweet from "./CreateTweet.vue"
+import TweetItem from "@/components/TweetItem.vue"
+import CreateTweet from "@/components/CreateTweet.vue"
 
 export default {
   name: 'App',
