@@ -1,6 +1,7 @@
 <template>
   <router-link to="/">Home</router-link>
-  <h4>current User -- {{ user.username }}</h4>
+  <!-- display username from state -->
+  <h4 v-if="user">current User -- {{ user.username }}</h4>
   <router-view/>
 </template>
 
@@ -12,7 +13,8 @@ export default {
   name: 'App',
   setup() {
     const store = useStore()
-    const user = computed(() => store.state.user)
+    // get user from vuex state
+    const user = computed(() => store.state.User.user)
     return {
       user
     }
