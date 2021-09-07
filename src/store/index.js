@@ -14,6 +14,7 @@ export default createStore({
   actions: {
   },
 
+  // modules for individual state management using vuex
   modules: {
     User: UserModule
   }

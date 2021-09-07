@@ -1,5 +1,8 @@
 # vue-app
 
+Demo application with most of the features in Vuejs with vue-router and vuex.
+Based on Youtube tutorial [video](https://youtu.be/ZqgiuPt5QZo)
+
 ## Project setup
 ```
 yarn install
