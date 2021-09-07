@@ -1,7 +1,8 @@
 <template>
   <div id="profile">
-    @{{ state.user.username }} -- {{ fullName }}
-    <br>
+    <h3>@{{ state.user.username }} -- {{ fullName }}</h3>
+    <h4>User id --> {{ userId }}</h4>
+    <hr>
     <strong>Followers: {{ state.followers }}</strong>
     <br>
     <button @click="followUser">Follow</button>
@@ -24,6 +25,8 @@
 
 <script>
 import { reactive, watch, computed, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
+import { users } from "@/assets/users.js"
 import TweetItem from "@/components/TweetItem.vue"
 import CreateTweet from "@/components/CreateTweet.vue"
 
@@ -31,20 +34,15 @@ export default {
   name: 'UserProfile',
   components: { TweetItem, CreateTweet },
   setup() {
+
+    const route = useRoute()
+    const userId = computed(() => route.params.userId)
+
+    // TODO: if (userId) fetch from api based on user id.
+
     const state = reactive({
       followers: 0,
-      user: {
-        id: 1,
-        username: '_balap',
-        firstName: 'Balasubramanian',
-        lastName: 'Palaniappan',
-        email: 'bala@c12.io',
-        isAdmin: true,
-        tweets: [
-          {id: 1, message: "Hello world our first message"},
-          {id: 2, message: "How is the second message going on"}
-        ]
-      }
+      user: users[userId.value - 1] || users[0]
     })
 
     // watch datachange on the data and react based on it.
@@ -54,7 +52,7 @@ export default {
       }
     })
 
-    const fullName = computed(() => {return `${state.user.firstName} ${state.user.lastName}`})
+    const fullName = computed(() => `${state.user.firstName} ${state.user.lastName}`)
 
     function followUser() {
       console.log(state.followers)
@@ -80,6 +78,7 @@ export default {
     return {
       state,
       fullName,
+      userId,
       followUser,
       toggleSelected,
       createTweet
